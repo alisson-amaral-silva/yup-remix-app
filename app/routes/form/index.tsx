@@ -1,8 +1,18 @@
-import { Grid, InputLabel, MenuItem, Select, FormControl, Button, FormHelperText } from "@mui/material";
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { FormSchema } from "~/utils/formSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { TextFieldWrapper, ButtonWrapper } from './styles';
+import { useCallback, useState } from "react";
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import Grid from '@mui/material/Grid';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import { Controller, useForm } from "react-hook-form";
+import { FormSchema } from "~/utils/formSchema";
+import { ButtonWrapper, TextFieldWrapper } from './styles';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 interface IFormInputs {
   firstName: string;
@@ -11,6 +21,8 @@ interface IFormInputs {
   favoriteSuperhero: { label: string; value: string };
 }
 export default function Form() {
+  const [showPassword, setPassword] = useState(false);
+
   const {
     control,
     register,
@@ -20,9 +32,18 @@ export default function Form() {
     resolver: yupResolver(FormSchema)
   });
 
-  const onSubmit: SubmitHandler<IFormInputs> = data => {
-    console.log(data)
+  const onSubmit = useCallback((formValues: IFormInputs) => {
+    console.log(formValues);
+  }, []);
+
+  const handleClickShowPassword = () => {
+    setPassword(!showPassword);
   };
+
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
   return (
     <main>
       <h1>Form</h1>
@@ -57,9 +78,21 @@ export default function Form() {
               name="password"
               control={control}
               defaultValue=""
-              render={({ field }) => <TextFieldWrapper error={!!errors.password} helperText={errors.password && errors.password.message} label="Password" {...register('password')} {...field} />}
+              render={({ field }) => <TextFieldWrapper error={!!errors.password} helperText={errors.password && errors.password.message} type={showPassword ? 'text' : 'password'} InputProps={{
+                endAdornment: <>
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                </>
+              }} label="Password" {...register('password')} {...field} />}
             />
-            {/* {errors.password && <p>{errors.password.message}</p>} */}
           </Grid>
 
 
@@ -74,7 +107,7 @@ export default function Form() {
                   <FormControl sx={{ m: 1, minWidth: 120 }} fullWidth error={!!errors.favoriteSuperhero}>
                     <InputLabel id="superhero-select">Favorite Super hero</InputLabel>
                     <Select
-                    label="Favorite Super hero"
+                      label="Favorite Super hero"
                       labelId="superhero-select"
                       {...register('favoriteSuperhero')}
                       value={value || ''}
