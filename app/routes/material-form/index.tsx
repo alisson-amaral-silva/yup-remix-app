@@ -20,7 +20,7 @@ interface IFormInputs {
   password: string;
   favoriteSuperhero: { label: string; value: string };
 }
-export default function Form() {
+export default function MaterialForm() {
   const [showPassword, setPassword] = useState(false);
 
   const {
@@ -46,7 +46,7 @@ export default function Form() {
 
   return (
     <main>
-      <h1>Form</h1>
+      <h1>Material UI Form</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={2}>
           <Grid item xs={3}>
