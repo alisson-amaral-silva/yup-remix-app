@@ -104,7 +104,7 @@ export default function Form() {
               control={control}
               render={({ field: { onChange, value } }) =>
                 <>
-                  <FormControl sx={{ m: 1, minWidth: 120 }} fullWidth error={!!errors.favoriteSuperhero}>
+                  <FormControl sx={{ m: 1, minWidth: 120, margin: 0 }} fullWidth error={!!errors.favoriteSuperhero}>
                     <InputLabel id="superhero-select">Favorite Super hero</InputLabel>
                     <Select
                       label="Favorite Super hero"
